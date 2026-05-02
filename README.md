@@ -147,23 +147,44 @@ This allows the platform to support privacy-conscious local workflows while rema
 %%{init: {
   "theme": "base",
   "look": "handDrawn",
-  "fontFamily": "\"Comic Sans MS\", \"Segoe Print\", \"Bradley Hand\", \"Chalkboard SE\", cursive",
+  "fontFamily": "\"Segoe Print\", \"Comic Sans MS\", \"Chalkboard SE\", cursive",
   "flowchart": {
     "curve": "basis",
-    "nodeSpacing": 38,
-    "rankSpacing": 46,
-    "padding": 18
+    "nodeSpacing": 42,
+    "rankSpacing": 50,
+    "padding": 20,
+    "htmlLabels": true
   },
   "themeVariables": {
-    "background": "#fffdf8",
-    "primaryColor": "#f8fafc",
+    "background": "#f8fafc",
+    "primaryColor": "#ffffff",
     "primaryTextColor": "#0f172a",
-    "primaryBorderColor": "#475569",
-    "lineColor": "#64748b",
-    "secondaryColor": "#eef6ff",
-    "tertiaryColor": "#fef3e2",
-    "fontSize": "16px"
-  }
+    "primaryBorderColor": "#94a3b8",
+    "lineColor": "#94a3b8",
+    "secondaryColor": "#f8fafc",
+    "tertiaryColor": "#fefce8",
+    "fontSize": "16px",
+    "mainBkg": "#ffffff",
+    "nodeBorder": "#cbd5e1",
+    "clusterBkg": "#f8fafc",
+    "clusterBorder": "#e2e8f0",
+    "edgeLabelBackground": "#ffffff"
+  },
+  "themeCSS": "
+    svg { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 18px; padding: 20px; }
+    .node rect, .node polygon, .node path {
+      filter: drop-shadow(0 1px 1px rgba(15, 23, 42, 0.04));
+    }
+    .label, .nodeLabel, .edgeLabel {
+      color: #0f172a !important;
+      font-weight: 600;
+    }
+    .edgeLabel {
+      background: #ffffff !important;
+      border-radius: 8px;
+      padding: 2px 6px;
+    }
+  "
 }}%%
 
 flowchart TB
@@ -212,10 +233,10 @@ flowchart TB
 
     REPORTS --> CHAIN
 
-    classDef interface fill:#eaf4ff,stroke:#3b82f6,color:#0f172a,stroke-width:2px,rx:18,ry:18;
-    classDef engine fill:#f8fafc,stroke:#64748b,color:#0f172a,stroke-width:2px,rx:18,ry:18;
-    classDef security fill:#fff7e8,stroke:#f59e0b,color:#0f172a,stroke-width:2px,rx:18,ry:18;
-    classDef evidence fill:#ecfdf3,stroke:#10b981,color:#0f172a,stroke-width:2px,rx:18,ry:18;
+    classDef interface fill:#eff6ff,stroke:#60a5fa,color:#0f172a,stroke-width:1.5px,rx:18,ry:18;
+    classDef engine fill:#ffffff,stroke:#94a3b8,color:#0f172a,stroke-width:1.5px,rx:18,ry:18;
+    classDef security fill:#fff7ed,stroke:#fbbf24,color:#0f172a,stroke-width:1.5px,rx:18,ry:18;
+    classDef evidence fill:#ecfdf5,stroke:#34d399,color:#0f172a,stroke-width:1.5px,rx:18,ry:18;
 
     class UI interface;
     class ORCH,INGEST,FUZZ,AI engine;
