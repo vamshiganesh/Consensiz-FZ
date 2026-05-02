@@ -147,7 +147,7 @@ This allows the platform to support privacy-conscious local workflows while rema
 %%{init: {
   "theme": "base",
   "look": "handDrawn",
-  "fontFamily": "\"Segoe Print\", \"Comic Sans MS\", \"Chalkboard SE\", cursive",
+  "fontFamily": "\"Segoe Print\", \"Comic Sans MS\", \"Bradley Hand\", \"Chalkboard SE\", cursive",
   "flowchart": {
     "curve": "basis",
     "nodeSpacing": 42,
@@ -156,26 +156,33 @@ This allows the platform to support privacy-conscious local workflows while rema
     "htmlLabels": true
   },
   "themeVariables": {
-    "background": "#f8fafc",
-    "primaryColor": "#ffffff",
+    "background": "#ffffff",
+    "mainBkg": "#ffffff",
+    "secondBkg": "#f8fafc",
+    "tertiaryColor": "#fefce8",
+    "primaryColor": "#eff6ff",
     "primaryTextColor": "#0f172a",
     "primaryBorderColor": "#94a3b8",
     "lineColor": "#94a3b8",
-    "secondaryColor": "#f8fafc",
-    "tertiaryColor": "#fefce8",
-    "fontSize": "16px",
-    "mainBkg": "#ffffff",
-    "nodeBorder": "#cbd5e1",
-    "clusterBkg": "#f8fafc",
+    "secondaryColor": "#ffffff",
+    "clusterBkg": "#ffffff",
     "clusterBorder": "#e2e8f0",
-    "edgeLabelBackground": "#ffffff"
+    "edgeLabelBackground": "#ffffff",
+    "fontSize": "16px"
   },
   "themeCSS": "
-    svg { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 18px; padding: 20px; }
-    .node rect, .node polygon, .node path {
-      filter: drop-shadow(0 1px 1px rgba(15, 23, 42, 0.04));
+    .mermaid svg {
+      background: #ffffff !important;
+      border: 1px solid #e5e7eb;
+      border-radius: 20px;
+      padding: 24px;
+      box-sizing: border-box;
     }
-    .label, .nodeLabel, .edgeLabel {
+    .node rect, .node polygon, .node path, .node circle {
+      filter: drop-shadow(0 1px 1px rgba(15,23,42,0.05));
+    }
+    .label, .nodeLabel, .edgeLabel, foreignObject div {
+      font-family: 'Segoe Print', 'Comic Sans MS', 'Bradley Hand', 'Chalkboard SE', cursive !important;
       color: #0f172a !important;
       font-weight: 600;
     }
