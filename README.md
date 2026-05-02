@@ -144,28 +144,50 @@ This allows the platform to support privacy-conscious local workflows while rema
 ## Architecture
 
 ```mermaid
+%%{init: {
+  "theme": "base",
+  "look": "handDrawn",
+  "fontFamily": "\"Comic Sans MS\", \"Segoe Print\", \"Bradley Hand\", \"Chalkboard SE\", cursive",
+  "flowchart": {
+    "curve": "basis",
+    "nodeSpacing": 38,
+    "rankSpacing": 46,
+    "padding": 18
+  },
+  "themeVariables": {
+    "background": "#fffdf8",
+    "primaryColor": "#f8fafc",
+    "primaryTextColor": "#0f172a",
+    "primaryBorderColor": "#475569",
+    "lineColor": "#64748b",
+    "secondaryColor": "#eef6ff",
+    "tertiaryColor": "#fef3e2",
+    "fontSize": "16px"
+  }
+}}%%
+
 flowchart TB
-    UI["Web Dashboard<br/>Contracts, Fuzzing, Vault, Fund Flow,<br/>Alerts, Reports, Settings"]
+    UI("Web Dashboard<br/>Contracts, Fuzzing, Vault, Fund Flow,<br/>Alerts, Reports, Settings")
 
-    ORCH["Analysis Orchestrator<br/>AI-assisted security workflow"]
+    ORCH("Analysis Orchestrator<br/>AI-assisted security workflow")
 
-    INGEST["Contract Ingestion and Analysis<br/>Source upload, address import,<br/>metadata and risk review"]
+    INGEST("Contract Ingestion and Analysis<br/>Source upload, address import,<br/>metadata and risk review")
 
-    FUZZ["Continuous Fuzzing Engine<br/>Input generation, execution logs,<br/>invariant failures and crashes"]
+    FUZZ("Continuous Fuzzing Engine<br/>Input generation, execution logs,<br/>invariant failures and crashes")
 
-    VAULT["Failure Case Vault<br/>Reproducible findings, input-to-failure<br/>chains and regression cases"]
+    VAULT("Failure Case Vault<br/>Reproducible findings, input-to-failure<br/>chains and regression cases")
 
-    CROSS["Cross-Contract Verification<br/>Dependency mapping, interaction matrix<br/>and conflict detection"]
+    CROSS("Cross-Contract Verification<br/>Dependency mapping, interaction matrix<br/>and conflict detection")
 
-    FLOW["Fund Flow Monitoring<br/>Transaction tracing, entity flow mapping<br/>and anomaly detection"]
+    FLOW("Fund Flow Monitoring<br/>Transaction tracing, entity flow mapping<br/>and anomaly detection")
 
-    ALERTS["Alerts and Risk Timeline<br/>Severity signals, temporal evolution<br/>and system health"]
+    ALERTS("Alerts and Risk Timeline<br/>Severity signals, temporal evolution<br/>and system health")
 
-    REPORTS["Reports and Evidence<br/>Audit summaries, exports, root hashes,<br/>proof verification and on-chain records"]
+    REPORTS("Reports and Evidence<br/>Audit summaries, exports, root hashes,<br/>proof verification and on-chain records")
 
-    AI["AI Engine Layer<br/>Ollama or cloud models<br/>analysis and patch suggestions"]
+    AI("AI Engine Layer<br/>Ollama or cloud models<br/>analysis and patch suggestions")
 
-    CHAIN["Blockchain and Evidence Layer<br/>Sepolia-compatible audit logging<br/>and verification workflow"]
+    CHAIN("Blockchain and Evidence Layer<br/>Sepolia-compatible audit logging<br/>and verification workflow")
 
     UI --> ORCH
 
@@ -190,10 +212,10 @@ flowchart TB
 
     REPORTS --> CHAIN
 
-    classDef interface fill:#eaf7ff,stroke:#1aa7e8,color:#0f172a,stroke-width:2px;
-    classDef engine fill:#f8fafc,stroke:#64748b,color:#0f172a,stroke-width:2px;
-    classDef security fill:#fff7ed,stroke:#f59e0b,color:#0f172a,stroke-width:2px;
-    classDef evidence fill:#ecfdf5,stroke:#10b981,color:#0f172a,stroke-width:2px;
+    classDef interface fill:#eaf4ff,stroke:#3b82f6,color:#0f172a,stroke-width:2px,rx:18,ry:18;
+    classDef engine fill:#f8fafc,stroke:#64748b,color:#0f172a,stroke-width:2px,rx:18,ry:18;
+    classDef security fill:#fff7e8,stroke:#f59e0b,color:#0f172a,stroke-width:2px,rx:18,ry:18;
+    classDef evidence fill:#ecfdf3,stroke:#10b981,color:#0f172a,stroke-width:2px,rx:18,ry:18;
 
     class UI interface;
     class ORCH,INGEST,FUZZ,AI engine;
