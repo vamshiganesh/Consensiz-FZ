@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Contract {
+  id        String   @id @default(uuid())
+  name      String
+  source    String
+  createdAt DateTime @default(now())
+}
+
+model Finding {
+  id          String   @id @default(uuid())
+  contractId  String
+  title       String
+  severity    String   // CRITICAL, HIGH, MEDIUM, LOW
+  vulnClass   String
+  description String
+  status      String   @default("OPEN")
+  createdAt   DateTime @default(now())
+  ipfsCid       String?
+  sepoliaTxHash String?
+  zkProof       String?
+  registeredAt  DateTime?
+}
