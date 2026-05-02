@@ -143,6 +143,7 @@ This allows the platform to support privacy-conscious local workflows while rema
 
 ## Architecture
 
+```mermaid
 flowchart TB
     UI["Web Dashboard<br/>Contracts, Fuzzing, Vault, Fund Flow,<br/>Alerts, Reports, Settings"]
 
@@ -198,6 +199,7 @@ flowchart TB
     class ORCH,INGEST,FUZZ,AI engine;
     class VAULT,CROSS,FLOW,ALERTS security;
     class REPORTS,CHAIN evidence;
+```
     
 ## Key Differentiators
 
