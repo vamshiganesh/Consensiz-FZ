@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="slides-format" content="viewport">
+    <title>Consensiz-FZ Pitch Deck</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind v4 CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: '#faf8f5',
+                        'bg-deep': '#f5f0eb',
+                        surface: '#ede8e1',
+                        text: '#0f172a',
+                        'text-secondary': '#475569',
+                        'text-muted': '#64748b',
+                        'accent-1': '#2563EB',
+                        'accent-2': '#0891B2',
+                        'accent-3': '#64748b',
+                        'glass-bg': 'rgba(255, 255, 255, 0.75)',
+                        'glass-border': 'rgba(0, 0, 0, 0.06)',
+                        vignette: 'rgba(0, 0, 0, 0.04)'
+                    },
+                    fontFamily: {
+                        display: ['"Instrument Serif"', 'serif'],
+                        body: ['"Work Sans"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* DECK NAVIGATION */
+        :root { --color-bg: #faf8f5; --color-text: #0f172a; --glow-color-rgb: 37,99,235; }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { background: var(--color-bg); margin: 0; }
+        body { font-family: "Work Sans", sans-serif; color: var(--color-text); overflow: hidden; height: 100vh; width: 100vw; }
+        .deck { width: 100vw; height: 100vh; position: relative; }
+        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transform: scale(0.95); transition: opacity 0.7s ease, transform 0.7s ease; pointer-events: none; overflow: hidden; }
+        .slide.active { opacity: 1; transform: scale(1); pointer-events: all; }
+        .slide > .content { position: relative; z-index: 2; width: 100%; max-width: 1100px; padding: clamp(1.5rem, 4vw, 4rem); margin: 0 auto; }
+        .nav-controls { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; z-index: 100; background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); padding: 10px 24px; border-radius: 40px; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .nav-btn { width: 40px; height: 40px; border: none; background: transparent; color: #2563EB; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .nav-btn:hover { background: rgba(0,0,0,0.04); }
+        .slide-dots { display: flex; gap: 8px; }
+        .slide-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(0,0,0,0.1); cursor: pointer; transition: background 0.3s, transform 0.3s; }
+        .slide-dots .dot.active { background: #2563EB; transform: scale(1.3); }
+        .slide-counter { font-size: 0.8rem; color: #64748b; min-width: 40px; text-align: center; }
+
+        .reveal { opacity: 0; transform: translateY(20px); }
+
+        /* Effects */
+        .text-glow { text-shadow: 0 0 20px rgba(var(--glow-color-rgb), 0.3); }
+        .stat-glow { text-shadow: 0 0 30px rgba(var(--glow-color-rgb), 0.4); }
+
+        /* Glass styling for light theme */
+        .glass-card { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01); border-radius: 0.75rem; padding: 2rem; }
+
+        /* Gradients */
+        .gradient-mesh { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); animation: float-slow 15s ease-in-out infinite; }
+        .blob:nth-child(2) { animation: float-drift 18s ease-in-out infinite; }
+        .blob:nth-child(3) { animation: float-slow 22s ease-in-out infinite reverse; }
+
+        @keyframes float-slow {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(40px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+        @keyframes float-drift {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-30px, -40px) scale(1.1); }
+            66% { transform: translate(20px, 30px) scale(0.9); }
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* Depth */
+        .slide::before {
+            content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+            background-repeat: repeat; background-size: 256px 256px; opacity: 0.015; mix-blend-mode: multiply;
+        }
+
+        /* Number counter styles */
+        .odometer-digit { display: flex; flex-direction: column; transition: transform 1.5s cubic-bezier(0.16, 1, 0.3, 1); line-height: 1; height: 1em; overflow: hidden; }
+        .odometer-digit span { display: block; text-align: center; }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="deck">
+    <!-- SLIDE 1: Title -->
+    <div class="slide slide-1 active" data-slide="1">
+        <div class="gradient-mesh">
+            <div class="blob" style="width: 60vw; height: 60vh; top: -10vh; right: -10vw; background: #2563EB; opacity: 0.06;"></div>
+            <div class="blob" style="width: 50vw; height: 50vh; bottom: -10vh; left: -10vw; background: #0891B2; opacity: 0.05;"></div>
+        </div>
+        <div class="content text-center">
+            <div class="text-[90px] mb-6 animate-[float_4s_ease-in-out_infinite] opacity-90 drop-shadow-md">🛡️</div>
+            <h1 class="font-display text-5xl md:text-7xl font-bold bg-gradient-to-br from-accent-1 via-accent-2 to-accent-1 bg-clip-text text-transparent tracking-tight mb-6 reveal pb-2">
+                Consensiz-FZ
+            </h1>
+            <p class="text-xl md:text-2xl font-light text-text-secondary tracking-wide reveal mb-12">
+                The World's First Self-Healing & Cryptographically Proven<br>Smart Contract Fuzzer
+            </p>
+
+            <div class="flex gap-6 items-center justify-center mt-8 reveal">
+                <div class="px-6 py-3 bg-white/50 border border-black/5 rounded-full shadow-sm">
+                    <p class="text-sm font-semibold text-text uppercase tracking-widest mb-1 opacity-70">Team VASHIng machine</p>
+                    <p class="text-text-secondary font-medium">CB-110</p>
+                </div>
+                <div class="px-6 py-3 bg-white/50 border border-black/5 rounded-full shadow-sm text-left">
+                    <p class="text-sm font-medium text-text-secondary">Sri Varshini B</p>
+                    <p class="text-sm font-medium text-text-secondary">Vamshi Ganesh B</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: Problem & Intro -->
+    <div class="slide slide-2" data-slide="2">
+        <div class="gradient-mesh">
+            <div class="blob" style="width: 40vw; height: 40vh; top: 10vh; right: 10vw; background: #2563EB; opacity: 0.04;"></div>
+        </div>
+        <div class="content">
+            <h2 class="font-display text-4xl font-bold text-accent-1 mb-10 reveal border-b border-black/10 pb-4 inline-block">The Problem & Our Solution</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="reveal">
+                    <p class="text-xs font-bold uppercase tracking-widest text-text-muted mb-3">Target Problem Statement</p>
+                    <div class="p-6 bg-white border-l-4 border-accent-1 shadow-sm rounded-r-xl">
+                        <p class="text-lg italic text-text-secondary leading-relaxed">
+                            "Bombard a target system with random and malformed inputs, automatically detect crashes and unexpected behaviour, and log the complete input-to-failure chain for analysis."
+                        </p>
+                    </div>
+                </div>
+
+                <div class="reveal">
+                    <p class="text-xs font-bold uppercase tracking-widest text-text-muted mb-3">Our Innovation</p>
+                    <p class="text-lg text-text leading-relaxed mb-4">
+                        Current fuzzers test contracts in isolation, report bugs in terminal text, and leave patching to humans.
+                    </p>
+                    <p class="text-lg text-text leading-relaxed font-medium">
+                        Consensiz-FZ is an autonomous pipeline that uses AI to find bugs, visualizes the financial impact live, automatically generates verified code patches, and anchors cryptographic Zero-Knowledge Proofs of the findings.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: Key Stats -->
+    <div class="slide slide-3" data-slide="3">
+        <div class="gradient-mesh">
+            <div class="blob" style="width: 50vw; height: 50vh; bottom: 0; left: 25vw; background: #0891B2; opacity: 0.05;"></div>
+        </div>
+        <div class="content">
+            <h2 class="font-display text-4xl font-bold text-center mb-16 reveal">Why Fuzzing Needs to Evolve</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card flex flex-col items-center text-center reveal hover:-translate-y-1 transition duration-300">
+                    <div class="text-4xl mb-4">📉</div>
+                    <div class="text-5xl font-bold text-accent-1 mb-2 stat-glow" data-count="73" data-suffix="%">0%</div>
+                    <p class="text-sm font-semibold uppercase tracking-wider text-text-secondary mt-2">Of DeFi Exploits</p>
+                    <p class="text-sm text-text-muted mt-2">Emerge only when multiple contracts interact—invisible to standard single-contract fuzzers.</p>
+                </div>
+
+                <div class="glass-card flex flex-col items-center text-center reveal hover:-translate-y-1 transition duration-300">
+                    <div class="text-4xl mb-4">⏳</div>
+                    <div class="text-5xl font-bold text-accent-1 mb-2 stat-glow" data-count="81" data-suffix=".5%">0%</div>
+                    <p class="text-sm font-semibold uppercase tracking-wider text-text-secondary mt-2">Auto-Patch Success</p>
+                    <p class="text-sm text-text-muted mt-2">Recent research shows LLM + Knowledge Graphs can auto-repair smart contract code vulnerabilities.</p>
+                </div>
+
+                <div class="glass-card flex flex-col items-center text-center reveal hover:-translate-y-1 transition duration-300">
+                    <div class="text-4xl mb-4">🔒</div>
+                    <div class="text-5xl font-bold text-accent-1 mb-2 stat-glow" data-count="100" data-suffix="%">0%</div>
+                    <p class="text-sm font-semibold uppercase tracking-wider text-text-secondary mt-2">Audit Deniability</p>
+                    <p class="text-sm text-text-muted mt-2">Current PDF audit reports can be altered or ignored. Cryptographic ZK proofs cannot.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: Solution Detail -->
+    <div class="slide slide-4" data-slide="4">
+        <div class="content">
+            <h2 class="font-display text-4xl font-bold mb-10 reveal">The Consensiz-FZ Pipeline</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div class="p-5 bg-white shadow-sm border border-black/5 rounded-xl reveal flex gap-4 items-start">
+                        <div class="text-2xl pt-1">1️⃣</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-text">Cross-Contract Protocol Fuzzing</h3>
+                            <p class="text-sm text-text-secondary mt-1">We don't just fuzz single functions. We build a dependency graph and inject "chaos" (reordering, timestamp manipulation) across the entire protocol.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 bg-white shadow-sm border border-black/5 rounded-xl reveal flex gap-4 items-start">
+                        <div class="text-2xl pt-1">2️⃣</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-text">Autonomous Auto-Patching</h3>
+                            <p class="text-sm text-text-secondary mt-1">When Foundry detects a crash, an LLM queries a Knowledge Graph to generate a code patch, then automatically re-fuzzes the contract to prove the fix works.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="p-5 bg-white shadow-sm border border-black/5 rounded-xl reveal flex gap-4 items-start">
+                        <div class="text-2xl pt-1">3️⃣</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-text">ZK-Proof Tamper Evidence</h3>
+                            <p class="text-sm text-text-secondary mt-1">We run the crash inputs through a RISC Zero zkVM to generate a cryptographic proof of the vulnerability and anchor the CID on-chain. Undeniable evidence.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 bg-white shadow-sm border border-black/5 rounded-xl reveal flex gap-4 items-start">
+                        <div class="text-2xl pt-1">4️⃣</div>
+                        <div>
+                            <h3 class="font-bold text-lg text-text">Live Sankey Visualization</h3>
+                            <p class="text-sm text-text-secondary mt-1">Instead of terminal logs, the fuzzer renders an animated diagram showing exactly how money drains during an exploit, calculating the exact USD impact.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: How it's Different -->
+    <div class="slide slide-5" data-slide="5">
+        <div class="gradient-mesh">
+            <div class="blob" style="width: 40vw; height: 40vh; bottom: 10vh; right: 10vw; background: #0891B2; opacity: 0.04;"></div>
+        </div>
+        <div class="content">
+            <h2 class="font-display text-4xl font-bold mb-10 reveal text-center">How We Solve It Differently</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="glass-card reveal">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-xl">❌</span>
+                        <h3 class="font-bold text-xl text-text-muted">Standard Fuzzers</h3>
+                    </div>
+                    <ul class="space-y-3 text-text-secondary">
+                        <li class="flex gap-2"><span>•</span> Test isolated smart contracts</li>
+                        <li class="flex gap-2"><span>•</span> Output long terminal trace logs</li>
+                        <li class="flex gap-2"><span>•</span> Tell developers a bug exists</li>
+                        <li class="flex gap-2"><span>•</span> Generate PDF audit reports</li>
+                    </ul>
+                </div>
+
+                <div class="glass-card border-accent-1/20 reveal relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-16 h-16 bg-accent-1 opacity-10 rounded-bl-full"></div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-xl">✅</span>
+                        <h3 class="font-bold text-xl text-accent-1">Consensiz-FZ</h3>
+                    </div>
+                    <ul class="space-y-3 text-text">
+                        <li class="flex gap-2"><span>•</span> Test interactions across the whole protocol</li>
+                        <li class="flex gap-2"><span>•</span> Visualize money flow divergence live</li>
+                        <li class="flex gap-2"><span>•</span> Write and validate the code fix automatically</li>
+                        <li class="flex gap-2"><span>•</span> Anchor undeniable Zero-Knowledge proofs</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: Novelty & Future -->
+    <div class="slide slide-6" data-slide="6">
+        <div class="gradient-mesh">
+            <div class="blob" style="width: 60vw; height: 60vh; top: -10vh; left: -10vw; background: #2563EB; opacity: 0.05;"></div>
+        </div>
+        <div class="content">
+            <h2 class="font-display text-4xl font-bold mb-8 reveal">Novelty & Future Scope</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="reveal">
+                    <div class="mb-4 inline-block px-4 py-1.5 bg-accent-1/10 text-accent-1 rounded-full text-sm font-bold tracking-wider uppercase">Uniqueness</div>
+                    <h3 class="text-2xl font-bold mb-3">The "Self-Healing" Loop</h3>
+                    <p class="text-text-secondary mb-6 leading-relaxed">
+                        Going from fuzzing directly to patching and re-validation is an academic gap identified in early 2026. Consensiz-FZ is the first product to close this loop. Combining this with ZK-proofs means we secure contracts and mathematically prove our work.
+                    </p>
+                </div>
+
+                <div class="reveal">
+                    <div class="mb-4 inline-block px-4 py-1.5 bg-accent-2/10 text-accent-2 rounded-full text-sm font-bold tracking-wider uppercase">Future Vision</div>
+                    <h3 class="text-2xl font-bold mb-3">Temporal Vulnerability Drift</h3>
+                    <p class="text-text-secondary leading-relaxed">
+                        Future iterations will incorporate Monte Carlo simulations to fuzz against <strong>projected future blockchain states</strong> (e.g., simulated price crashes or liquidity drains).
+                        <br><br>
+                        This will allow Consensiz-FZ to detect "time-delayed vulnerabilities"—bugs that don't exist today, but will trigger when market conditions change.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav-controls">
+    <button class="nav-btn" onclick="changeSlide(-1)">&#8249;</button>
+    <div class="slide-dots" id="dots"></div>
+    <button class="nav-btn" onclick="changeSlide(1)">&#8250;</button>
+    <span class="slide-counter" id="counter">1 / 6</span>
+</div>
+
+<script>
+    /* DECK NAVIGATION SCRIPT */
+    let current = 1;
+    const total = document.querySelectorAll('.slide').length;
+    const dotsContainer = document.getElementById('dots');
+    const counter = document.getElementById('counter');
+
+    for (let i = 1; i <= total; i++) { 
+        const dot = document.createElement('div'); 
+        dot.className = 'dot' + (i === 1 ? ' active' : ''); 
+        dot.onclick = () => goToSlide(i); 
+        dotsContainer.appendChild(dot); 
+    }
+
+    function goToSlide(n) {
+        const prev = document.querySelector('.slide.active');
+        const next = document.querySelector(`.slide[data-slide="${n}"]`);
+        if (prev) prev.classList.remove('active');
+        if (next) { next.classList.add('active'); animateSlide(next); }
+        current = n; 
+        updateNav();
+    }
+
+    function changeSlide(dir) { 
+        let next = current + dir; 
+        if (next < 1) next = total; 
+        if (next > total) next = 1; 
+        goToSlide(next); 
+    }
+
+    function updateNav() { 
+        document.querySelectorAll('.dot').forEach((d, i) => { 
+            d.classList.toggle('active', i + 1 === current); 
+        }); 
+        counter.textContent = current + ' / ' + total; 
+    }
+
+    // Keyboard navigation (PageUp/PageDown, Arrows)
+    document.addEventListener('keydown', (e) => { 
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { 
+            e.preventDefault(); changeSlide(1); 
+        } 
+        if (e.key === 'ArrowLeft' || e.key === 'PageUp') { 
+            e.preventDefault(); changeSlide(-1); 
+        } 
+    });
+
+    // Touch swipe navigation
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => { 
+        const diff = touchStartX - e.changedTouches[0].clientX; 
+        if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1); 
+    });
+
+    /* ANIMATIONS */
+    function animateSlide(slide) {
+        slide.querySelectorAll('.reveal').forEach((el, i) => {
+            el.style.transition = 'none';
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.offsetHeight; // Reflow
+            const delay = i * 0.1;
+            el.style.transition = `opacity 0.5s ease ${delay}s, transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) ${delay}s`;
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0px)';
+        });
+
+        // Counter animations
+        slide.querySelectorAll('[data-count]:not(.counted)').forEach(el => {
+            el.classList.add('counted');
+            const target = parseFloat(el.dataset.count);
+            const suffix = el.dataset.suffix || '';
+            let cur = 0; 
+            const step = target / 30;
+            const timer = setInterval(() => { 
+                cur += step; 
+                if (cur >= target) { cur = target; clearInterval(timer); } 
+                el.textContent = (cur % 1 !== 0 ? cur.toFixed(1) : Math.round(cur)) + suffix; 
+            }, 40);
+        });
+    }
+
+    // Init first slide
+    setTimeout(() => {
+        animateSlide(document.querySelector('.slide.active'));
+    }, 100);
+</script>
+
+</body>
+</html>
