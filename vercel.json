@@ -8,7 +8,7 @@
       "root": "backend",
       "framework": "express",
       "runtime": "node",
-      "entrypoint": "index.ts"
+      "entrypoint": "src/index.ts"
     }
   },
   "rewrites": [
