@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="slides-format" content="viewport">
+    <title>Consensiz-FZ Presentation</title>
+
+    <!-- Modern SaaS Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Inter:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind v4 CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bg: '#f8fafc',
+                        'bg-deep': '#f1f5f9',
+                        surface: '#ffffff',
+                        text: '#0f172a',
+                        'text-secondary': '#334155',
+                        'text-muted': '#64748b',
+                        'accent-1': '#4f46e5', /* Indigo 600 */
+                        'accent-2': '#0ea5e9', /* Sky 500 */
+                        'accent-3': '#3b82f6', /* Blue 500 */
+                    },
+                    fontFamily: {
+                        display: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        body: ['"Inter"', 'sans-serif'],
+                        mono: ['"Fira Code"', 'monospace']
+                    },
+                    boxShadow: {
+                        'saas': '0 10px 40px -10px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.03)',
+                        'saas-hover': '0 20px 40px -10px rgba(79,70,229,0.15), 0 1px 3px rgba(0,0,0,0.05)',
+                        'inner-light': 'inset 0 1px 0 rgba(255,255,255,1)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* DECK NAVIGATION */
+        :root { --color-bg: #f8fafc; --color-text: #0f172a; --glow-color-rgb: 79,70,229; }
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { background: var(--color-bg); margin: 0; font-family: "Inter", sans-serif; color: var(--color-text); overflow: hidden; height: 100vh; width: 100vw; }
+
+        /* Grid Background Pattern */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(15, 23, 42, 0.03) 1px, transparent 1px), 
+                linear-gradient(to bottom, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+            position: absolute; inset: 0; z-index: 0;
+        }
+
+        .deck { width: 100vw; height: 100vh; position: relative; }
+        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--color-bg); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transform: scale(0.95); transition: opacity 0.7s ease, transform 0.7s ease; pointer-events: none; overflow: hidden; }
+        .slide.active { opacity: 1; transform: scale(1); pointer-events: all; }
+        .slide > .content { position: relative; z-index: 2; width: 100%; max-width: 1100px; padding: clamp(1.5rem, 4vw, 4rem); margin: 0 auto; }
+
+        .nav-controls { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 16px; z-index: 100; background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); padding: 10px 24px; border-radius: 40px; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        .nav-btn { width: 40px; height: 40px; border: none; background: transparent; color: #4f46e5; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .nav-btn:hover { background: rgba(79,70,229,0.1); }
+        .slide-dots { display: flex; gap: 8px; }
+        .slide-dots .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(0,0,0,0.15); cursor: pointer; transition: background 0.3s, transform 0.3s; }
+        .slide-dots .dot.active { background: #4f46e5; transform: scale(1.3); }
+        .slide-counter { font-size: 0.8rem; font-weight: 600; color: #64748b; min-width: 40px; text-align: center; font-family: "Plus Jakarta Sans", sans-serif; }
+
+        .reveal { opacity: 0; transform: translateY(20px); }
+
+        /* SaaS Glass Cards */
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.8); 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.02), inset 0 1px 0 rgba(255,255,255,1); 
+            border-radius: 1rem; 
+            padding: 2rem; 
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Modern Mockup Window */
+        .mockup-window {
+            background: #ffffff;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .mockup-header {
+            height: 2.5rem;
+            background: #f8fafc;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            gap: 0.5rem;
+        }
+        .mockup-dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; }
+
+        /* Floating Deco Shapes */
+        .deco-shape { position: absolute; border-radius: 50%; filter: blur(60px); opacity: 0.4; pointer-events: none; z-index: 1; }
+        @keyframes float-slow { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(20px, -20px); } }
+        @keyframes float-drift { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-20px, 15px); } }
+        @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(79,70,229,0.4); } 70% { box-shadow: 0 0 0 15px rgba(79,70,229,0); } 100% { box-shadow: 0 0 0 0 rgba(79,70,229,0); } }
+
+        .stat-glow { text-shadow: 0 0 30px rgba(var(--glow-color-rgb), 0.3); }
+
+        /* Sankey Flow Path Animation */
+        @keyframes flow-dash { to { stroke-dashoffset: -20; } }
+        .sankey-path { stroke-dasharray: 5, 5; animation: flow-dash 1s linear infinite; }
+        .sankey-path-alert { stroke-dasharray: 5, 5; animation: flow-dash 0.5s linear infinite; stroke: #ef4444; }
+
+    </style>
+</head>
+<body>
+
+<div class="deck">
+
+    <!-- SLIDE 1: Title & Modern UI Vibe -->
+    <div class="slide slide-1 active" data-slide="1">
+        <div class="bg-grid-pattern"></div>
+        <div class="deco-shape bg-accent-1" style="width: 500px; height: 500px; top: -100px; right: -100px; animation: float-slow 12s ease-in-out infinite;"></div>
+        <div class="deco-shape bg-accent-2" style="width: 400px; height: 400px; bottom: -50px; left: -100px; animation: float-drift 15s ease-in-out infinite; opacity: 0.3;"></div>
+        <canvas class="particle-canvas" style="position: absolute; inset: 0; z-index: 1; opacity: 0.5;"></canvas>
+
+        <div class="content flex flex-col items-center text-center">
+
+            <!-- Custom Modern Logo -->
+            <div class="relative w-24 h-24 mb-8 reveal hover:scale-105 transition-transform duration-500">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-xl">
+                    <path d="M50 10L90 30V70L50 90L10 70V30L50 10Z" fill="url(#paint0_linear)" fill-opacity="0.1" stroke="url(#paint1_linear)" stroke-width="4"/>
+                    <path d="M50 25L75 37.5V62.5L50 75L25 62.5V37.5L50 25Z" fill="url(#paint2_linear)"/>
+                    <circle cx="50" cy="50" r="8" fill="white"/>
+                    <defs>
+                        <linearGradient id="paint0_linear" x1="10" y1="10" x2="90" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#4f46e5"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient>
+                        <linearGradient id="paint1_linear" x1="10" y1="10" x2="90" y2="90" gradientUnits="userSpaceOnUse"><stop stop-color="#4f46e5"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient>
+                        <linearGradient id="paint2_linear" x1="25" y1="25" x2="75" y2="75" gradientUnits="userSpaceOnUse"><stop stop-color="#4f46e5"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient>
+                    </defs>
+                </svg>
+                <!-- UI Glow behind logo -->
+                <div class="absolute inset-0 bg-accent-1 blur-2xl opacity-30 -z-10 rounded-full"></div>
+            </div>
+
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm mb-6 reveal">
+                <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-1 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-accent-1"></span></span>
+                <span class="text-xs font-semibold tracking-wide text-text-secondary uppercase">Next-Gen Blockchain Security</span>
+            </div>
+
+            <h1 class="font-display text-6xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 reveal">
+                Consensiz<span class="bg-clip-text text-transparent bg-gradient-to-r from-accent-1 to-accent-2">-FZ</span>
+            </h1>
+
+            <p class="text-xl font-body text-text-secondary max-w-2xl mx-auto leading-relaxed reveal mb-12">
+                The world's first autonomous, self-healing smart contract security platform with live financial flow visualization.
+            </p>
+
+            <!-- Team Info modern cards -->
+            <div class="grid grid-cols-2 gap-4 w-full max-w-lg mx-auto reveal">
+                <div class="glass-card !p-4 flex flex-col items-center justify-center border-t-2 border-t-accent-1">
+                    <p class="text-[0.65rem] font-bold text-text-muted uppercase tracking-widest mb-1">Team VASHIng machine</p>
+                    <p class="text-lg font-display font-bold text-slate-800">CB-110</p>
+                </div>
+                <div class="glass-card !p-4 flex flex-col items-start justify-center">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-100 to-indigo-200 flex items-center justify-center text-xs font-bold text-indigo-700">S</div>
+                        <p class="text-sm font-semibold text-slate-700">Sri Varshini B</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-br from-sky-100 to-sky-200 flex items-center justify-center text-xs font-bold text-sky-700">V</div>
+                        <p class="text-sm font-semibold text-slate-700">Vamshi Ganesh B</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: Problem & Intro with UI Mockup -->
+    <div class="slide slide-2" data-slide="2">
+        <div class="bg-grid-pattern opacity-50"></div>
+        <div class="content max-w-6xl">
+            <div class="flex items-center gap-3 mb-8 reveal">
+                <div class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-accent-1 border border-indigo-100">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h2 class="font-display text-3xl font-bold text-slate-900">The Problem & Approach</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Left: Text Content -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="reveal">
+                        <p class="text-xs font-bold uppercase tracking-widest text-accent-1 mb-2">Core Objective</p>
+                        <div class="p-6 bg-slate-50 border-l-4 border-accent-1 rounded-r-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute -right-4 -top-4 text-slate-200 opacity-50"><svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M10 11h-4v-4h4v4zm6-4h-4v4h4v-4zm-6 6h-4v4h4v-4zm6 0h-4v4h4v-4z"></path></svg></div>
+                            <p class="text-slate-700 leading-relaxed relative z-10 font-medium">
+                                "Bombard a target system with random and malformed inputs, automatically detect crashes and unexpected behaviour, and log the complete input-to-failure chain for analysis."
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="reveal">
+                        <p class="text-xs font-bold uppercase tracking-widest text-accent-2 mb-2 mt-8">Our Innovation</p>
+                        <p class="text-slate-600 leading-relaxed">
+                            Terminal logs are dead. We transformed fuzzing into an <strong class="text-slate-900 font-semibold">autonomous UI-driven pipeline</strong>. We use AI to guide attacks, visualize the exact financial flow of the exploit, auto-generate code patches, and secure the audit trail with ZK-Proofs.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right: Dashboard Mockup -->
+                <div class="lg:col-span-7 reveal">
+                    <div class="mockup-window h-[400px]">
+                        <div class="mockup-header">
+                            <div class="mockup-dot bg-rose-400"></div><div class="mockup-dot bg-amber-400"></div><div class="mockup-dot bg-emerald-400"></div>
+                            <div class="ml-4 text-[10px] font-mono text-slate-400 bg-white px-3 py-1 rounded border border-slate-200">Terminal: Fuzzing Engine</div>
+                        </div>
+                        <div class="flex-1 bg-slate-900 p-6 font-mono text-sm flex flex-col justify-between overflow-hidden relative">
+                            <!-- Code typing effect representation -->
+                            <div class="space-y-2 text-slate-300">
+                                <p><span class="text-emerald-400">➜</span> <span class="text-sky-300">forge</span> fuzz --target Protocol.sol</p>
+                                <p class="text-slate-500">[INFO] Generating LLM-guided input mutations...</p>
+                                <p class="text-slate-500">[INFO] Fuzzing iteration 4,092...</p>
+                                <p class="text-rose-400 font-bold mt-4 animate-pulse">✖ CRASH DETECTED: Reentrancy vulnerability</p>
+                                <p class="text-slate-300 ml-4 border-l-2 border-rose-500/50 pl-4 py-2 bg-rose-500/10">
+                                    <span class="text-slate-400">Target:</span> withdraw(uint256)<br>
+                                    <span class="text-slate-400">Input:</span> 0x000...<br>
+                                    <span class="text-amber-300">Exploit Value: $142,500</span>
+                                </p>
+                            </div>
+
+                            <!-- Mini abstract timeline at bottom -->
+                            <div class="mt-4 pt-4 border-t border-slate-800 flex items-center justify-between">
+                                <div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-emerald-500 pulse-ring"></div><span class="text-[10px] text-slate-500 uppercase">System Active</span></div>
+                                <div class="flex gap-1">
+                                    <div class="h-1 w-8 bg-emerald-500 rounded"></div><div class="h-1 w-8 bg-emerald-500 rounded"></div><div class="h-1 w-8 bg-rose-500 rounded"></div><div class="h-1 w-8 bg-slate-700 rounded"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3: Key Stats (Modern Cards) -->
+    <div class="slide slide-3" data-slide="3">
+        <div class="bg-grid-pattern opacity-50"></div>
+        <div class="deco-shape bg-accent-2" style="width: 600px; height: 400px; bottom: -100px; right: -100px; opacity: 0.15; animation: float-slow 10s infinite;"></div>
+
+        <div class="content">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-4xl font-bold text-slate-900 mb-4">Why Security Tooling Must Evolve</h2>
+                <p class="text-text-secondary text-lg">The gap between academic research and current industry standard.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Stat Card 1 -->
+                <div class="glass-card hover:-translate-y-2 hover:shadow-saas-hover transition-all duration-300 reveal group">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-accent-1 mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <div class="text-5xl font-display font-extrabold text-slate-900 mb-2 flex items-baseline">
+                        <span data-count="73">0</span><span class="text-3xl text-accent-1">%</span>
+                    </div>
+                    <h3 class="font-bold text-slate-800 mb-2">Cross-Contract Exploits</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Of DeFi vulnerabilities only emerge when contracts interact. Single-contract fuzzers miss these completely.</p>
+                </div>
+
+                <!-- Stat Card 2 -->
+                <div class="glass-card hover:-translate-y-2 hover:shadow-saas-hover transition-all duration-300 reveal group" style="transition-delay: 100ms;">
+                    <div class="w-12 h-12 rounded-xl bg-sky-50 flex items-center justify-center text-accent-2 mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                    </div>
+                    <div class="text-5xl font-display font-extrabold text-slate-900 mb-2 flex items-baseline">
+                        <span data-count="81.5">0</span><span class="text-3xl text-accent-2">%</span>
+                    </div>
+                    <h3 class="font-bold text-slate-800 mb-2">Auto-Patch Success</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Recent 2026 research proves LLMs + Knowledge Graphs can automatically repair code vulnerabilities post-fuzz.</p>
+                </div>
+
+                <!-- Stat Card 3 -->
+                <div class="glass-card hover:-translate-y-2 hover:shadow-saas-hover transition-all duration-300 reveal group" style="transition-delay: 200ms;">
+                    <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <div class="text-5xl font-display font-extrabold text-slate-900 mb-2 flex items-baseline">
+                        <span data-count="100">0</span><span class="text-3xl text-slate-500">%</span>
+                    </div>
+                    <h3 class="font-bold text-slate-800 mb-2">Audit Cryptography</h3>
+                    <p class="text-sm text-slate-500 leading-relaxed">Regulators demand mathematical proof. Our system uses zkVMs to make findings cryptographically undeniable.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 4: Proposed Solution & UI Screen -->
+    <div class="slide slide-4" data-slide="4">
+        <div class="bg-grid-pattern opacity-50"></div>
+        <div class="content max-w-6xl">
+            <h2 class="font-display text-3xl font-bold text-slate-900 mb-8 reveal">The Proposed Solution Architecture</h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
+                <!-- Left: Pipeline Steps -->
+                <div class="space-y-4">
+                    <div class="glass-card !p-5 flex gap-4 items-center reveal hover:border-accent-1/50 transition-colors">
+                        <div class="w-10 h-10 rounded-full bg-accent-1 text-white flex items-center justify-center font-bold shadow-md shrink-0">1</div>
+                        <div>
+                            <h3 class="font-bold text-slate-900">Cross-Contract Fuzzing</h3>
+                            <p class="text-sm text-slate-500">Injects chaos across entire protocol dependency graphs.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card !p-5 flex gap-4 items-center reveal hover:border-accent-2/50 transition-colors" style="transition-delay: 100ms;">
+                        <div class="w-10 h-10 rounded-full bg-accent-2 text-white flex items-center justify-center font-bold shadow-md shrink-0">2</div>
+                        <div>
+                            <h3 class="font-bold text-slate-900">Autonomous Auto-Patching</h3>
+                            <p class="text-sm text-slate-500">Generates and re-validates LLM code fixes instantly.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card !p-5 flex gap-4 items-center reveal hover:border-slate-400 transition-colors" style="transition-delay: 200ms;">
+                        <div class="w-10 h-10 rounded-full bg-slate-700 text-white flex items-center justify-center font-bold shadow-md shrink-0">3</div>
+                        <div>
+                            <h3 class="font-bold text-slate-900">ZK-Proof Tamper Evidence</h3>
+                            <p class="text-sm text-slate-500">Anchors findings to blockchain via RISC Zero zkVM.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Dashboard Visualization Mockup -->
+                <div class="reveal h-full">
+                    <div class="mockup-window h-full min-h-[300px] bg-white">
+                        <div class="mockup-header border-b border-slate-100 bg-slate-50/50">
+                            <div class="text-xs font-semibold text-slate-500 flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                Live Fund Flow Analysis
+                            </div>
+                        </div>
+                        <div class="flex-1 p-6 flex flex-col justify-center relative">
+                            <!-- CSS Sankey Abstract Representation -->
+                            <div class="relative h-40 w-full flex justify-between items-center px-4">
+                                <!-- Nodes -->
+                                <div class="w-16 h-12 bg-slate-800 rounded-md shadow-lg z-10 flex items-center justify-center text-xs text-white">Pool A</div>
+                                <div class="flex flex-col gap-4 z-10">
+                                    <div class="w-16 h-10 bg-indigo-600 rounded-md shadow-lg flex items-center justify-center text-xs text-white">Contract</div>
+                                    <div class="w-16 h-10 bg-sky-500 rounded-md shadow-lg flex items-center justify-center text-xs text-white">Treasury</div>
+                                </div>
+                                <div class="w-16 h-12 bg-rose-500 rounded-md shadow-lg z-10 flex items-center justify-center text-xs text-white pulse-ring">Hacker</div>
+
+                                <!-- Connecting Lines (SVG) -->
+                                <svg class="absolute inset-0 w-full h-full" style="z-index: 0;">
+                                    <path d="M 80 80 C 150 80, 150 50, 220 50" fill="none" stroke="#cbd5e1" stroke-width="6" class="sankey-path"/>
+                                    <path d="M 80 80 C 150 80, 150 110, 220 110" fill="none" stroke="#cbd5e1" stroke-width="4" class="sankey-path"/>
+                                    <!-- Alert Path -->
+                                    <path d="M 280 50 C 350 50, 350 80, 420 80" fill="none" stroke-width="8" class="sankey-path-alert"/>
+                                </svg>
+                            </div>
+                            <!-- Exploit Banner -->
+                            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white border border-rose-200 shadow-lg rounded-full px-4 py-2 flex items-center gap-2 animate-bounce">
+                                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                                <span class="text-xs font-bold text-slate-700">Exploit Detected: <span class="text-rose-500">$18.4M Drain</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: Comparison -->
+    <div class="slide slide-5" data-slide="5">
+        <div class="bg-grid-pattern opacity-50"></div>
+        <div class="content max-w-5xl">
+            <h2 class="font-display text-4xl font-bold text-center text-slate-900 mb-12 reveal">Redefining the Standard</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Standard Card -->
+                <div class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm reveal opacity-80">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-xl text-slate-500">Standard Fuzzers</h3>
+                    </div>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-slate-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                            <span class="text-slate-600 font-medium">Test isolated smart contracts in a vacuum</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-slate-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                            <span class="text-slate-600 font-medium">Output difficult-to-read terminal trace logs</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-slate-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path></svg>
+                            <span class="text-slate-600 font-medium">Require manual human patching of code</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Consensiz Card -->
+                <div class="bg-white border-2 border-accent-1 rounded-2xl p-8 shadow-saas reveal relative overflow-hidden transform hover:scale-[1.02] transition-transform">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-accent-1 opacity-[0.03] rounded-bl-full"></div>
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent-1 to-accent-2"></div>
+
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                        <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-accent-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        </div>
+                        <h3 class="font-bold text-xl text-slate-900">Consensiz-FZ</h3>
+                    </div>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <div class="w-5 h-5 mt-0.5 rounded-full bg-indigo-50 flex items-center justify-center shrink-0"><div class="w-2 h-2 rounded-full bg-accent-1"></div></div>
+                            <span class="text-slate-800 font-semibold">Tests interactions across the whole protocol</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="w-5 h-5 mt-0.5 rounded-full bg-indigo-50 flex items-center justify-center shrink-0"><div class="w-2 h-2 rounded-full bg-accent-1"></div></div>
+                            <span class="text-slate-800 font-semibold">Visualizes money flow divergence live in UI</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <div class="w-5 h-5 mt-0.5 rounded-full bg-indigo-50 flex items-center justify-center shrink-0"><div class="w-2 h-2 rounded-full bg-accent-1"></div></div>
+                            <span class="text-slate-800 font-semibold">Writes & validates code fixes automatically</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 6: Novelty & Future -->
+    <div class="slide slide-6" data-slide="6">
+        <div class="bg-grid-pattern opacity-50"></div>
+        <div class="content">
+            <h2 class="font-display text-4xl font-bold mb-10 reveal text-center">Uniqueness & Future Vision</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <!-- Left: Concepts -->
+                <div class="space-y-8">
+                    <div class="glass-card reveal border-l-4 border-l-accent-1">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">The "Self-Healing" Loop</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Going directly from fuzzing to patching to re-validation is a critical gap identified in 2026 academia. Consensiz-FZ closes this loop, converting an auditing tool into a self-healing security agent.
+                        </p>
+                    </div>
+
+                    <div class="glass-card reveal border-l-4 border-l-accent-2" style="transition-delay: 100ms;">
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Temporal Vulnerability Drift</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Future integration of Monte Carlo simulations will fuzz against <strong>projected future blockchain states</strong> (e.g., market crashes). We detect "time-delayed vulnerabilities" before the trigger conditions even exist in the real world.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right: Visual timeline representation -->
+                <div class="reveal p-8 bg-white border border-slate-200 rounded-2xl shadow-saas relative">
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 text-center">Temporal Security MRI</h4>
+
+                    <div class="relative h-32 w-full flex items-center">
+                        <!-- X-Axis -->
+                        <div class="absolute inset-x-0 h-0.5 bg-slate-100"></div>
+
+                        <!-- Timeline Curve SVG -->
+                        <svg class="absolute inset-0 w-full h-full overflow-visible">
+                            <path d="M 0 60 Q 50 60, 100 60 T 200 40 T 300 90 T 400 20" fill="none" stroke="url(#timeline-grad)" stroke-width="4" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="timeline-grad" x1="0" y1="0" x2="100%" y2="0">
+                                    <stop offset="0%" stop-color="#22c55e" /> <!-- Green Safe -->
+                                    <stop offset="60%" stop-color="#eab308" /> <!-- Yellow Warning -->
+                                    <stop offset="100%" stop-color="#ef4444" /> <!-- Red Exploit -->
+                                </linearGradient>
+                            </defs>
+                        </svg>
+
+                        <!-- Points -->
+                        <div class="absolute left-[0%] w-3 h-3 rounded-full bg-emerald-500 border-2 border-white shadow-sm mt-[60px] -translate-y-1/2"></div>
+                        <div class="absolute left-[50%] w-4 h-4 rounded-full bg-amber-400 border-2 border-white shadow-md mt-[40px] -translate-y-1/2 pulse-ring"></div>
+                        <div class="absolute left-[100%] w-5 h-5 rounded-full bg-rose-500 border-2 border-white shadow-lg mt-[20px] -translate-y-1/2 animate-bounce"></div>
+                    </div>
+
+                    <div class="flex justify-between text-xs font-medium text-slate-400 mt-4">
+                        <span>Deployment (Safe)</span>
+                        <span>Month 3 (Drift)</span>
+                        <span class="text-rose-500">Month 6 (Exploitable)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- NAVIGATION DOTS -->
+<div class="nav-controls">
+    <button class="nav-btn" onclick="changeSlide(-1)">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+    </button>
+    <div class="slide-dots" id="dots"></div>
+    <button class="nav-btn" onclick="changeSlide(1)">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+    </button>
+    <span class="slide-counter ml-2" id="counter">1 / 7</span>
+
+    <!-- SLIDE 7: Detailed Flow Diagram -->
+    <div class="slide slide-7" data-slide="7">
+        <div class="content">
+            <div class="reveal text-center mb-8">
+                <h2 class="font-display text-4xl font-bold text-slate-900 text-gradient inline-block">Architecture & Data Flow</h2>
+            </div>
+
+            <div class="reveal relative w-full max-w-[1000px] h-[500px] mx-auto bg-white/60 backdrop-blur-xl border border-slate-200 rounded-2xl shadow-xl z-10">
+
+                <svg viewBox="0 0 1000 500" class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 0;">
+                    <defs>
+                        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+                        </marker>
+                        <marker id="arrow-cyan" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#0ea5e9" />
+                        </marker>
+                        <marker id="arrow-emerald" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#10b981" />
+                        </marker>
+                    </defs>
+
+                    <!-- 1. Contract(150,100) -> Engine(500,100) -->
+                    <path d="M 230 100 L 410 100" stroke="#94a3b8" stroke-width="3" stroke-dasharray="6 6" class="animate-[dash_15s_linear_infinite_reverse]" fill="none" marker-end="url(#arrow)" />
+
+                    <!-- 2. Engine(500,100) -> Trace(850,100) -->
+                    <path d="M 590 100 L 770 100" stroke="#0ea5e9" stroke-width="3" stroke-dasharray="6 6" class="animate-[dash_15s_linear_infinite_reverse]" fill="none" marker-end="url(#arrow-cyan)" />
+
+                    <!-- 3. Trace(850,100) -> IPFS(500,250) -->
+                    <path d="M 850 160 C 850 250, 640 250, 640 250" stroke="#10b981" stroke-width="3" stroke-dasharray="6 6" class="animate-[dash_15s_linear_infinite_reverse]" fill="none" marker-end="url(#arrow-emerald)" />
+
+                    <!-- 4. IPFS(500,250) -> Blockchain(150,400) -->
+                    <path d="M 360 250 C 150 250, 150 340, 150 340" stroke="#94a3b8" stroke-width="3" stroke-dasharray="6 6" class="animate-[dash_15s_linear_infinite_reverse]" fill="none" marker-end="url(#arrow)" />
+
+                    <!-- 5. IPFS(500,250) -> Dashboard(850,400) -->
+                    <path d="M 640 250 C 850 250, 850 340, 850 340" stroke="#0ea5e9" stroke-width="3" stroke-dasharray="6 6" class="animate-[dash_15s_linear_infinite_reverse]" fill="none" marker-end="url(#arrow-cyan)" />
+
+                    <!-- 6. Blockchain(150,400) -> Dashboard(850,400) -->
+                    <path d="M 230 400 L 770 400" stroke="#94a3b8" stroke-width="3" stroke-dasharray="6 6" class="animate-[dash_15s_linear_infinite_reverse]" fill="none" marker-end="url(#arrow)" />
+
+                    <style>
+                        @keyframes dash {
+                            to { stroke-dashoffset: 100; }
+                        }
+                    </style>
+                </svg>
+
+                <!-- 1. Contract -->
+                <div class="absolute w-[160px] top-[40px] left-[70px] flex flex-col items-center group bg-white p-4 rounded-2xl shadow-sm border border-slate-100 z-20 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-slate-800 text-white rounded-xl shadow-lg flex items-center justify-center mb-2 border border-slate-600">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </div>
+                    <div class="text-sm font-bold text-slate-800 text-center leading-tight">Target<br>Contract</div>
+                </div>
+
+                <!-- 2. Foundry Engine -->
+                <div class="absolute w-[180px] top-[30px] left-[410px] flex flex-col items-center group bg-white p-4 rounded-2xl shadow-md border border-cyan-100 z-20 hover:-translate-y-1 transition-transform">
+                    <div class="w-16 h-16 bg-gradient-to-br from-cyan-500 to-blue-600 text-white rounded-2xl shadow-xl flex items-center justify-center mb-2 border-2 border-white relative">
+                        <div class="absolute -inset-1 bg-cyan-400/30 blur-md rounded-2xl -z-10 group-hover:bg-cyan-400/50 transition-colors"></div>
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    </div>
+                    <div class="text-sm font-bold text-slate-800 text-center leading-tight">Foundry<br>Engine</div>
+                </div>
+
+                <!-- 3. Trace -->
+                <div class="absolute w-[160px] top-[40px] left-[770px] flex flex-col items-center group bg-white p-4 rounded-2xl shadow-sm border border-slate-100 z-20 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-slate-100 text-slate-700 rounded-xl shadow-inner flex items-center justify-center mb-2 border border-slate-300">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                    </div>
+                    <div class="text-sm font-bold text-slate-800 text-center leading-tight">Crash<br>Trace</div>
+                </div>
+
+                <!-- 4. IPFS -->
+                <div class="absolute w-[280px] top-[210px] left-[360px] flex items-center gap-4 bg-slate-900 p-4 rounded-xl shadow-xl border border-slate-700 z-20 hover:-translate-y-1 transition-transform group">
+                    <div class="w-12 h-12 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center border border-emerald-500/30 flex-shrink-0">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+                    </div>
+                    <div class="text-left">
+                        <div class="text-sm font-bold text-white">IPFS Storage</div>
+                        <div class="text-[11px] text-emerald-400 font-mono mt-1">CID: QmXyZW7s...</div>
+                    </div>
+                </div>
+
+                <!-- 5. Blockchain -->
+                <div class="absolute w-[160px] top-[340px] left-[70px] flex flex-col items-center group bg-white p-4 rounded-2xl shadow-sm border border-slate-100 z-20 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-indigo-50 text-indigo-600 rounded-xl shadow-inner flex items-center justify-center mb-2 border border-indigo-200">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+                    </div>
+                    <div class="text-sm font-bold text-slate-800 text-center leading-tight">On-chain<br>Anchor</div>
+                </div>
+
+                <!-- 6. Dashboard -->
+                <div class="absolute w-[160px] top-[340px] left-[770px] flex flex-col items-center group bg-white p-4 rounded-2xl shadow-sm border border-slate-100 z-20 hover:-translate-y-1 transition-transform">
+                    <div class="w-14 h-14 bg-white text-slate-800 rounded-xl shadow-lg flex items-center justify-center mb-2 border-2 border-cyan-400">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    </div>
+                    <div class="text-sm font-bold text-slate-800 text-center leading-tight">Public<br>Dashboard</div>
+                </div>
+
+            </div>
+
+            <div class="reveal mt-8 text-center text-slate-500 text-sm max-w-2xl mx-auto">
+                The Foundry engine runs continuous invariant tests. Crashes are traced, bundled, and pinned to IPFS. The immutable CID is anchored on-chain for the UI dashboard to read.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    /* DECK NAVIGATION SCRIPT */
+    let current = 1;
+    const total = document.querySelectorAll('.slide').length;
+    const dotsContainer = document.getElementById('dots');
+    const counter = document.getElementById('counter');
+
+    for (let i = 1; i <= total; i++) { 
+        const dot = document.createElement('div'); 
+        dot.className = 'dot' + (i === 1 ? ' active' : ''); 
+        dot.onclick = () => goToSlide(i); 
+        dotsContainer.appendChild(dot); 
+    }
+
+    function goToSlide(n) {
+        const prev = document.querySelector('.slide.active');
+        const next = document.querySelector(`.slide[data-slide="${n}"]`);
+        if (prev) prev.classList.remove('active');
+        if (next) { next.classList.add('active'); animateSlide(next); }
+        current = n; 
+        updateNav();
+    }
+
+    function changeSlide(dir) { 
+        let next = current + dir; 
+        if (next < 1) next = total; 
+        if (next > total) next = 1; 
+        goToSlide(next); 
+    }
+
+    function updateNav() { 
+        document.querySelectorAll('.dot').forEach((d, i) => { 
+            d.classList.toggle('active', i + 1 === current); 
+        }); 
+        counter.textContent = current + ' / ' + total; 
+    }
+
+    // Keyboard navigation (PageUp/PageDown, Arrows, Space)
+    document.addEventListener('keydown', (e) => { 
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { 
+            e.preventDefault(); changeSlide(1); 
+        } 
+        if (e.key === 'ArrowLeft' || e.key === 'PageUp') { 
+            e.preventDefault(); changeSlide(-1); 
+        } 
+    });
+
+    // Touch swipe navigation
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+    document.addEventListener('touchend', (e) => { 
+        const diff = touchStartX - e.changedTouches[0].clientX; 
+        if (Math.abs(diff) > 50) changeSlide(diff > 0 ? 1 : -1); 
+    });
+
+    /* ANIMATIONS & EFFECTS */
+    function animateSlide(slide) {
+        slide.querySelectorAll('.reveal').forEach((el, i) => {
+            el.style.transition = 'none';
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.offsetHeight; // Reflow
+            const delay = i * 0.1;
+            el.style.transition = `opacity 0.6s ease ${delay}s, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) ${delay}s`;
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0px)';
+        });
+
+        // Counter animations
+        slide.querySelectorAll('[data-count]:not(.counted)').forEach(el => {
+            el.classList.add('counted');
+            const target = parseFloat(el.dataset.count);
+            let cur = 0; 
+            const step = target / 30;
+            const timer = setInterval(() => { 
+                cur += step; 
+                if (cur >= target) { cur = target; clearInterval(timer); } 
+                el.textContent = (cur % 1 !== 0 ? cur.toFixed(1) : Math.round(cur)); 
+            }, 40);
+        });
+    }
+
+    /* Ambient Particles */
+    window.initParticles = function(canvas) {
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+        const particles = Array.from({ length: 30 }, () => ({
+            x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 0.2, vy: (Math.random() - 0.5) * 0.2,
+            size: Math.random() * 2 + 1, alpha: Math.random() * 0.4 + 0.1
+        }));
+
+        (function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(79, 70, 229, ${p.alpha})`; ctx.fill();
+            });
+            requestAnimationFrame(animate);
+        })();
+    };
+
+    document.querySelectorAll('.particle-canvas').forEach(c => window.initParticles(c));
+
+    // Init first slide
+    setTimeout(() => {
+        animateSlide(document.querySelector('.slide.active'));
+    }, 100);
+</script>
+
+</body>
+</html>
